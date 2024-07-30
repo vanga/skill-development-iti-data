@@ -1,6 +1,7 @@
 import requests
 import json
 
+
 url = "https://wabi-india-central-a-primary-api.analysis.windows.net/public/reports/querydata?synchronous=true"
 headers = {
     "Origin": "https://app.powerbi.com",
@@ -16,7 +17,9 @@ headers = {
     "sec-ch-ua-platform": "\"Windows\"",
     "Content-Type": "application/json"
 }
+# def fetch_data(last_key=None):
 
+noOfRows = int(input("Enter no of rows to display: "))
 payload = {
     "version": "1.0.0",
     "queries": [
@@ -301,7 +304,7 @@ payload = {
                                                     [
                                                         {
                                                             "Literal": {
-                                                                "Value": "'LEH LADAKH'"
+                                                                "Value": "'KARGIL'"
                                                             }
                                                         }
                                                     ]
@@ -354,7 +357,7 @@ payload = {
                                     "DataVolume": 3,
                                     "Primary": {
                                         "Window": {
-                                            "Count": 25
+                                            "Count": noOfRows
                                         }
                                     }
                                 },
@@ -380,17 +383,38 @@ payload = {
     "cancelQueries": [],
     "modelId": 548316
 }
-
-
-
+count=0
+i = 0
+page_data = []
+page_data.append([])
+maxCount= int(input("Enter no of rows to display in one page: "))
+# maxCount= 10
 try:
     response = requests.post(url, headers=headers, json=payload)
     response.raise_for_status()
-    data = response.json()
-    
-    with open('response_data.json', 'w') as file:
-        json.dump(data, file, indent=4)
-    
-    print("Response data saved to 'response_data.json'")
-except requests.exceptions.RequestException as e:
+    allData = response.json()
+    while(True):
+        try:
+            data=allData.get('results')[0].get('result').get('data').get('dsr').get('DS')[0].get('PH')[0].get('DM0')[count]
+            page_data[i].append(data)
+            count+=1
+            if(count%maxCount==0):
+                i+=1
+                page_data.append([])
+        except Exception as e:
+            break
+except Exception as e:
     print(f"Request failed: {e}")
+
+
+if page_data and not page_data[-1]:
+    page_data.pop()
+print(len(page_data))
+for i in range(0,len(page_data)):
+    print('Page'+str(i+1))
+    for j in page_data[i]:
+        print(j)
+    print()
+
+
+
