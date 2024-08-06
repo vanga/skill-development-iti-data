@@ -1,6 +1,46 @@
 import requests
 import json
+from pathlib import Path
+import copy
 
+states = [
+    "ANDAMAN AND NICOBAR ISLANDS",
+    "ANDHRA PRADESH",
+    "ARUNACHAL PRADESH",
+    "ASSAM",
+    "BIHAR",
+    "CHANDIGARH",
+    "CHHATTISGARH",
+    "DELHI",
+    "GOA",
+    "GUJARAT",
+    "HARYANA",
+    "HIMACHAL PRADESH",
+    "JAMMU AND KASHMIR",
+    "JHARKHAND",
+    "KARNATAKA",
+    "KERALA",
+    "LADAKH",
+    "LAKSHADWEEP",
+    "MADHYA PRADESH",
+    "MAHARASHTRA",
+    "MANIPUR",
+    "MEGHALAYA",
+    "MIZORAM",
+    "NAGALAND",
+    "ODISHA",
+    "PUDUCHERRY",
+    "PUNJAB",
+    "RAJASTHAN",
+    "SIKKIM",
+    "TAMIL NADU",
+    "TELANGANA",
+    "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
+    "TRIPURA",
+    "UTTAR PRADESH",
+    "UTTARAKHAND",
+    "WEST BENGAL",
+]
 
 url = "https://wabi-india-central-a-primary-api.analysis.windows.net/public/reports/querydata?synchronous=true"
 headers = {
@@ -12,14 +52,14 @@ headers = {
     "Sec-Fetch-Site": "cross-site",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
     "X-PowerBI-ResourceKey": "fbae68f4-5949-4ffe-8592-53e02f7b9215",
-    "sec-ch-ua": "\"Not/A)Brand\";v=\"8\", \"Chromium\";v=\"126\", \"Google Chrome\";v=\"126\"",
+    "sec-ch-ua": '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
     "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"Windows\"",
-    "Content-Type": "application/json"
+    "sec-ch-ua-platform": '"Windows"',
+    "Content-Type": "application/json",
 }
 # def fetch_data(last_key=None):
 
-noOfRows = int(input("Enter no of rows to display: "))
+noOfRows = 1000
 payload = {
     "version": "1.0.0",
     "queries": [
@@ -34,201 +74,145 @@ payload = {
                                     {
                                         "Name": "d",
                                         "Entity": "Detail Report Trainee",
-                                        "Type": 0
+                                        "Type": 0,
                                     },
-                                    {
-                                        "Name": "t",
-                                        "Entity": "Trade",
-                                        "Type": 0
-                                    },
-                                    {
-                                        "Name": "s",
-                                        "Entity": "State",
-                                        "Type": 0
-                                    },
-                                    {
-                                        "Name": "di",
-                                        "Entity": "District",
-                                        "Type": 0
-                                    },
-                                    {
-                                        "Name": "d1",
-                                        "Entity": "Date_Table",
-                                        "Type": 0
-                                    },
-                                    {
-                                        "Name": "c",
-                                        "Entity": "Category",
-                                        "Type": 0
-                                    },
-                                    {
-                                        "Name": "q",
-                                        "Entity": "Qualification",
-                                        "Type": 0
-                                    },
-                                    {
-                                        "Name": "i",
-                                        "Entity": "ITI",
-                                        "Type": 0
-                                    }
+                                    {"Name": "t", "Entity": "Trade", "Type": 0},
+                                    {"Name": "s", "Entity": "State", "Type": 0},
+                                    {"Name": "di", "Entity": "District", "Type": 0},
+                                    {"Name": "d1", "Entity": "Date_Table", "Type": 0},
+                                    {"Name": "c", "Entity": "Category", "Type": 0},
+                                    {"Name": "q", "Entity": "Qualification", "Type": 0},
+                                    {"Name": "i", "Entity": "ITI", "Type": 0},
                                 ],
                                 "Select": [
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "d"
-                                                }
+                                                "SourceRef": {"Source": "d"}
                                             },
-                                            "Property": "pkTraineeRegNumber"
+                                            "Property": "pkTraineeRegNumber",
                                         },
-                                        "Name": "Detail Report Trainee.pkTraineeRegNumber"
+                                        "Name": "Detail Report Trainee.pkTraineeRegNumber",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "d"
-                                                }
+                                                "SourceRef": {"Source": "d"}
                                             },
-                                            "Property": "TraineeFirstName"
+                                            "Property": "TraineeFirstName",
                                         },
-                                        "Name": "Detail Report Trainee.TraineeFirstName"
+                                        "Name": "Detail Report Trainee.TraineeFirstName",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "d"
-                                                }
+                                                "SourceRef": {"Source": "d"}
                                             },
-                                            "Property": "Gender"
+                                            "Property": "Gender",
                                         },
-                                        "Name": "Detail Report Trainee.Gender"
+                                        "Name": "Detail Report Trainee.Gender",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "d"
-                                                }
+                                                "SourceRef": {"Source": "d"}
                                             },
-                                            "Property": "FatherGuardianName"
+                                            "Property": "FatherGuardianName",
                                         },
-                                        "Name": "Detail Report Trainee.FatherGuardianName"
+                                        "Name": "Detail Report Trainee.FatherGuardianName",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "d"
-                                                }
+                                                "SourceRef": {"Source": "d"}
                                             },
-                                            "Property": "MotherName"
+                                            "Property": "MotherName",
                                         },
-                                        "Name": "Detail Report Trainee.MotherName"
+                                        "Name": "Detail Report Trainee.MotherName",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "t"
-                                                }
+                                                "SourceRef": {"Source": "t"}
                                             },
-                                            "Property": "Name"
+                                            "Property": "Name",
                                         },
-                                        "Name": "Trade.Name"
+                                        "Name": "Trade.Name",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "t"
-                                                }
+                                                "SourceRef": {"Source": "t"}
                                             },
-                                            "Property": "Course Duration"
+                                            "Property": "Course Duration",
                                         },
                                         "Name": "Trade.Course Duration",
-                                        "NativeReferenceName": "Course Duration"
+                                        "NativeReferenceName": "Course Duration",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "s"
-                                                }
+                                                "SourceRef": {"Source": "s"}
                                             },
-                                            "Property": "StateName"
+                                            "Property": "StateName",
                                         },
-                                        "Name": "State.StateName"
+                                        "Name": "State.StateName",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "di"
-                                                }
+                                                "SourceRef": {"Source": "di"}
                                             },
-                                            "Property": "DistrictName"
+                                            "Property": "DistrictName",
                                         },
-                                        "Name": "District.DistrictName"
+                                        "Name": "District.DistrictName",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "c"
-                                                }
+                                                "SourceRef": {"Source": "c"}
                                             },
-                                            "Property": "Category"
+                                            "Property": "Category",
                                         },
-                                        "Name": "Category.Category"
+                                        "Name": "Category.Category",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "q"
-                                                }
+                                                "SourceRef": {"Source": "q"}
                                             },
-                                            "Property": "Qualification"
+                                            "Property": "Qualification",
                                         },
-                                        "Name": "Qualification.Qualification"
+                                        "Name": "Qualification.Qualification",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "t"
-                                                }
+                                                "SourceRef": {"Source": "t"}
                                             },
-                                            "Property": "Education Stream"
+                                            "Property": "Education Stream",
                                         },
-                                        "Name": "Trade.Education Stream"
+                                        "Name": "Trade.Education Stream",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "i"
-                                                }
+                                                "SourceRef": {"Source": "i"}
                                             },
-                                            "Property": "Name"
+                                            "Property": "Name",
                                         },
                                         "Name": "ITI.Name",
-                                        "NativeReferenceName": "Name"
+                                        "NativeReferenceName": "Name",
                                     },
                                     {
                                         "Column": {
                                             "Expression": {
-                                                "SourceRef": {
-                                                    "Source": "i"
-                                                }
+                                                "SourceRef": {"Source": "i"}
                                             },
-                                            "Property": "ITICategory"
+                                            "Property": "ITICategory",
                                         },
-                                        "Name": "ITI.ITICategory"
-                                    }
+                                        "Name": "ITI.ITICategory",
+                                    },
                                 ],
                                 "Where": [
                                     {
@@ -242,7 +226,7 @@ payload = {
                                                                     "Source": "d1"
                                                                 }
                                                             },
-                                                            "Property": "Year_Value"
+                                                            "Property": "Year_Value",
                                                         }
                                                     }
                                                 ],
@@ -250,11 +234,11 @@ payload = {
                                                     [
                                                         {
                                                             "Literal": {
-                                                                "Value": "'2014'"
+                                                                "Value": "'DUMMY_YEAR'"
                                                             }
                                                         }
                                                     ]
-                                                ]
+                                                ],
                                             }
                                         }
                                     },
@@ -269,7 +253,7 @@ payload = {
                                                                     "Source": "s"
                                                                 }
                                                             },
-                                                            "Property": "StateName"
+                                                            "Property": "StateName",
                                                         }
                                                     }
                                                 ],
@@ -277,41 +261,14 @@ payload = {
                                                     [
                                                         {
                                                             "Literal": {
-                                                                "Value": "'LADAKH'"
+                                                                "Value": "'DUMMY_STATE'"
                                                             }
                                                         }
                                                     ]
-                                                ]
+                                                ],
                                             }
                                         }
                                     },
-                                    {
-                                        "Condition": {
-                                            "In": {
-                                                "Expressions": [
-                                                    {
-                                                        "Column": {
-                                                            "Expression": {
-                                                                "SourceRef": {
-                                                                    "Source": "di"
-                                                                }
-                                                            },
-                                                            "Property": "DistrictName"
-                                                        }
-                                                    }
-                                                ],
-                                                "Values": [
-                                                    [
-                                                        {
-                                                            "Literal": {
-                                                                "Value": "'KARGIL'"
-                                                            }
-                                                        }
-                                                    ]
-                                                ]
-                                            }
-                                        }
-                                    }
                                 ],
                                 "OrderBy": [
                                     {
@@ -319,15 +276,13 @@ payload = {
                                         "Expression": {
                                             "Column": {
                                                 "Expression": {
-                                                    "SourceRef": {
-                                                        "Source": "d"
-                                                    }
+                                                    "SourceRef": {"Source": "d"}
                                                 },
-                                                "Property": "pkTraineeRegNumber"
+                                                "Property": "pkTraineeRegNumber",
                                             }
-                                        }
+                                        },
                                     }
-                                ]
+                                ],
                             },
                             "Binding": {
                                 "Primary": {
@@ -347,74 +302,110 @@ payload = {
                                                 10,
                                                 11,
                                                 12,
-                                                13
+                                                13,
                                             ],
-                                            "Subtotal": 1
+                                            "Subtotal": 1,
                                         }
                                     ]
                                 },
                                 "DataReduction": {
                                     "DataVolume": 3,
-                                    "Primary": {
-                                        "Window": {
-                                            "Count": noOfRows
-                                        }
-                                    }
+                                    "Primary": {"Window": {"Count": noOfRows}},
                                 },
-                                "Version": 1
+                                "Version": 1,
                             },
-                            "ExecutionMetricsKind": 1
+                            "ExecutionMetricsKind": 1,
                         }
                     }
                 ]
             },
             "QueryId": "",
-            "ApplicationContext": {
-                "DatasetId": "b26207fa-47fb-4ccb-b8bb-279e309842ee",
-                "Sources": [
-                    {
-                        "ReportId": "5c1da8a6-ba43-4d94-b1ed-afdded7da3cb",
-                        "VisualId": "ebaf64adc17e6d650202"
-                    }
-                ]
-            }
         }
     ],
     "cancelQueries": [],
-    "modelId": 548316
+    "modelId": 548316,
 }
-count=0
-i = 0
-page_data = []
-page_data.append([])
-maxCount= int(input("Enter no of rows to display in one page: "))
-# maxCount= 10
-try:
-    response = requests.post(url, headers=headers, json=payload)
-    response.raise_for_status()
-    allData = response.json()
-    while(True):
-        try:
-            data=allData.get('results')[0].get('result').get('data').get('dsr').get('DS')[0].get('PH')[0].get('DM0')[count]
-            page_data[i].append(data)
-            count+=1
-            if(count%maxCount==0):
-                i+=1
-                page_data.append([])
-        except Exception as e:
-            break
-except Exception as e:
-    print(f"Request failed: {e}")
 
 
-if page_data and not page_data[-1]:
-    page_data.pop()
-print(len(page_data))
-for i in range(0,len(page_data)):
-    print('Page'+str(i+1))
-    for j in page_data[i]:
-        print(j)
-    print()
+def fetch_data(year, state):
+    current_payload = copy.deepcopy(payload)
+    current_payload["queries"][0]["Query"]["Commands"][0][
+        "SemanticQueryDataShapeCommand"
+    ]["Query"]["Where"][0]["Condition"]["In"]["Values"][0][0]["Literal"][
+        "Value"
+    ] = f"'{year}'"
+    current_payload["queries"][0]["Query"]["Commands"][0][
+        "SemanticQueryDataShapeCommand"
+    ]["Query"]["Where"][1]["Condition"]["In"]["Values"][0][0]["Literal"][
+        "Value"
+    ] = f"'{state}'"
+    i = 0
+    try:
+        while True:
+            output_path = Path(f"data/raw/{state}/{year}/{i}.json")
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            if output_path.exists():
+                # read, set RT, increment i and continue
+                with open(output_path) as f:
+                    data = json.load(f)
+                    rt = (
+                        data.get("results")[0]
+                        .get("result", {})
+                        .get("data", {})
+                        .get("dsr", {})
+                        .get("DS")[0]
+                        .get("RT")
+                    )
+                    current_payload["queries"][0]["Query"]["Commands"][0][
+                        "SemanticQueryDataShapeCommand"
+                    ]["Binding"]["DataReduction"]["Primary"]["Window"][
+                        "RestartTokens"
+                    ] = rt
+                    i += 1
+                    continue
+            response = requests.post(
+                url, headers=headers, json=current_payload, timeout=120
+            )
+            response.raise_for_status()
+            data = response.json()
+            with open(output_path, "w") as f:
+                f.write(json.dumps(data))
+                print(f"Data written to {output_path}")
+
+            try:
+                rt_exists = (
+                    data.get("results")[0]
+                    .get("result", {})
+                    .get("data", {})
+                    .get("dsr", {})
+                    .get("DS")[0]
+                    .get("RT")
+                )
+                if rt_exists:
+                    print("next page exists")
+                    i += 1
+                    rt = (
+                        data.get("results")[0]
+                        .get("result", {})
+                        .get("data", {})
+                        .get("dsr", {})
+                        .get("DS")[0]
+                        .get("RT")
+                    )
+                    current_payload["queries"][0]["Query"]["Commands"][0][
+                        "SemanticQueryDataShapeCommand"
+                    ]["Binding"]["DataReduction"]["Primary"]["Window"][
+                        "RestartTokens"
+                    ] = rt
+                else:
+                    break
+            except Exception as e:
+                print(f"Request failed: {e}")
+                break
+    except Exception as e:
+        print(f"Request failed: {e}")
 
 
-
+for state in states:
+    for year in range(2014, 2023):
+        fetch_data(str(year), state)
